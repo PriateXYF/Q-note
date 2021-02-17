@@ -11,18 +11,22 @@
     <el-main>
       <div>
         <el-row class="allcard">
-          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" v-for="(item, index) in data" :key="index">
-            <el-card class="indexcontainer card">
-              <div style="padding: 14px;">
-                <span>{{item.content}}</span>
-                <div class="bottom clearfix">
-                  <div class="desc">{{item.time}}</div>
+          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" v-for="(item, index) in data" :key="index"
+            @click.native="copyContent(item.content)">
+            <el-tooltip class="item" effect="dark" :content="copyTip" placement="top">
+              <el-card class="indexcontainer card" shadow="hover">
+                <div style="padding: 14px;">
+                  <span v-show="item.isHide" ><i class="el-icon-lock"></i></span>
+                  <span v-show="!item.isHide" >{{item.content}}</span>
+                  <div class="bottom clearfix">
+                    <div class="desc">{{item.time}}</div>
+                  </div>
                 </div>
-              </div>
-            </el-card>
+              </el-card>
+            </el-tooltip>
           </el-col>
           <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
-            <el-card @click.native="showAddNoteDialog" class="indexcontainer card">
+            <el-card @click.native="showAddNoteDialog" class="indexcontainer card" shadow="hover">
               <div style="padding: 14px;">
                 <span><i class="el-icon-plus"></i></span>
                 <div class="bottom clearfix"></div>
@@ -102,6 +106,15 @@
     font-size: 20px;
   }
 
+  /* .card span{
+    max-width: 200px;
+    word-wrap : break-word;
+  } */
+  .el-card__body {
+    max-width: 100%;
+    word-wrap: break-word;
+  }
+
   .card:hover {
     cursor: pointer;
   }
@@ -133,7 +146,8 @@
           content: "",
           isHide: false
         },
-        data: []
+        data: [],
+        copyTip : '点击复制'
       }
     },
     methods: {
@@ -180,6 +194,18 @@
         }, function (res) {
           _this.$message.success('重置完毕！');
         })
+      },
+      async copyContent(content) {
+        try {
+          await navigator.clipboard.writeText(content);
+          this.copyTip = '已复制'
+          var _this = this
+          setTimeout(function(){
+            _this.copyTip = '点击复制'
+          }, 400)
+        } catch (err) {
+          this.$message.error('复制失败')
+        }
       }
     },
     mounted() {
