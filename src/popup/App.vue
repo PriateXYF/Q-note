@@ -10,10 +10,11 @@
     </el-header>
     <el-main>
       <card ref="card" :host="host" @modifyNote="modifyNote" @showAddNoteDialog="showAddNoteDialog"></card>
-    </el-main>
-    <el-footer>
       <add-dialog ref="addDialog" :host="host" @refreshData="refreshData"></add-dialog>
       <modify-dialog ref="modifyDialog" @refreshData="refreshData"></modify-dialog>
+    </el-main>
+    <el-footer>
+      
     </el-footer>
   </el-container>
 </template>

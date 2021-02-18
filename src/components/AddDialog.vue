@@ -1,8 +1,8 @@
 <template>
     <div>
         <el-dialog title="添加笔记" :visible.sync="dialogFormVisible" center>
-            <el-form :model="note">
-                <el-form-item>
+            <el-form :model="note" :rules="rules" ref="addForm">
+                <el-form-item prop="content">
                     <el-input type="textarea" placeholder="支持markdown" v-model="note.content" autocomplete="off"
                         v-on:keydown.enter.native="submitAddNote"></el-input>
                 </el-form-item>
@@ -24,7 +24,7 @@
 <script>
     import dayjs from 'dayjs'
     export default {
-        props : ['host'],
+        props: ['host'],
         data() {
             return {
                 dialogFormVisible: false,
@@ -33,6 +33,12 @@
                     remark: "",
                     isHide: false
                 },
+                rules: {
+                    content: [{
+                        required: true,
+                        message: '请填写笔记内容',
+                    }]
+                }
             }
         },
         methods: {
@@ -54,29 +60,38 @@
             },
             addNote() {
                 var _this = this
-                chrome.storage.sync.get({
-                    q_note_setting: {
-                        number: 0,
-                    },
-                    q_note_data: []
-                }, function (items) {
-                    _this.note.time = dayjs().format('YY-MM-DD HH:mm')
-                    _this.note.id = items.q_note_setting.number
-                    _this.note.host = _this.host
-                    items.q_note_data.push(_this.note)
-                    chrome.storage.sync.set({
-                        q_note_setting: {
-                            number: items.q_note_setting.number + 1,
-                        },
-                        q_note_data: items.q_note_data
-                    }, function () {
-                        _this.hideAddNoteDialog()
-                        console.log(items)
-                        _this.$emit('refreshData')
-                        // 此处需处理逻辑
-                        // _this.$refs.card.refreshData()
-                    })
-                })
+                this.$refs['addForm'].validate((valid) => {
+                    if (valid) {
+                        chrome.storage.sync.get({
+                            q_note_setting: {
+                                number: 0,
+                            },
+                            q_note_data: []
+                        }, function (items) {
+                            _this.note.time = dayjs().format('YY-MM-DD HH:mm')
+                            _this.note.id = items.q_note_setting.number
+                            _this.note.host = _this.host
+                            items.q_note_data.push(_this.note)
+                            chrome.storage.sync.set({
+                                q_note_setting: {
+                                    number: items.q_note_setting.number + 1,
+                                },
+                                q_note_data: items.q_note_data
+                            }, function () {
+                                _this.hideAddNoteDialog()
+                                console.log(items)
+                                _this.$emit('refreshData')
+                                // 此处需处理逻辑
+                                // _this.$refs.card.refreshData()
+                            })
+                        })
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
+
+
             },
         },
     }

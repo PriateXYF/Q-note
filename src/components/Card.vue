@@ -4,8 +4,14 @@
             <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" v-for="(item, index) in data" :key="index">
                 <el-card class="indexcontainer card" shadow="hover">
                     <div slot="header" class="clearfix">
-                        <span @click="deleteNote(item)" class="card-close-button"><i
-                                class="el-icon-circle-close"></i></span>
+                        <template>
+                            <el-popconfirm title="确定删除该笔记？" @confirm="deleteNote(item)">
+                                <!-- @click="" -->
+                                <span slot="reference" class="card-close-button"><i
+                                        class="el-icon-circle-close"></i></span>
+                            </el-popconfirm>
+                        </template>
+
                         <el-tooltip class="item" effect="dark" :content="copyTip" placement="top">
                             <span @click="copyContent(item)" class="card-button"><i
                                     :class="item.copyIcon || 'el-icon-copy-document'"></i></span>
@@ -146,7 +152,7 @@
             return {
                 copyTip: '复制',
                 data: [],
-                marked : marked,
+                marked: marked,
             }
         },
         methods: {
@@ -207,7 +213,7 @@
                     _this.data = _this.data.reverse()
                 })
             },
-            modifyNote(item){
+            modifyNote(item) {
                 this.$emit('modifyNote', item)
             }
         },

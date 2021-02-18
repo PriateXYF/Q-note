@@ -10,9 +10,8 @@
     "storage"
   ],
   "icons": {
-    "16": "icons/16.png",
-    "48": "icons/48.png",
-    "128": "icons/128.png"
+    "16": "icons/Icon16.png",
+    "128": "icons/Icon128.png"
   },
   "background": {
     "scripts": [
@@ -24,8 +23,7 @@
     "default_popup": "popup.html",
     "default_title": "__MSG_extName__",
     "default_icon": {
-      "19": "icons/19.png",
-      "38": "icons/38.png"
+      "32": "icons/Icon32.png"
     }
   }
 }
