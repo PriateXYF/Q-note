@@ -78,17 +78,6 @@
       hideAddNoteDialog() {
         this.$refs.addDialog.hideAddNoteDialog()
       },
-      resetData() {
-        var _this = this
-        chrome.storage.sync.set({
-          q_note_setting: {
-            number: 0,
-          },
-          q_note_data: []
-        }, function (res) {
-          _this.$message.success('重置完毕！');
-        })
-      },
       refreshData(){
         this.$refs.card.refreshData()
       },

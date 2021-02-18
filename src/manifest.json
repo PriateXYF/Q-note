@@ -25,5 +25,10 @@
     "default_icon": {
       "32": "icons/Icon32.png"
     }
+  },
+  "options_page": "options.html",
+  "options_ui": {
+    "page": "options.html",
+    "chrome_style": false
   }
 }

@@ -1,8 +1,8 @@
 <template>
     <div>
         <el-dialog title="修改笔记" :visible.sync="dialogFormVisible" center>
-            <el-form :model="note">
-                <el-form-item>
+            <el-form :model="note" :rules="rules" ref="modifyForm">
+                <el-form-item prop="content">
                     <el-input type="textarea" placeholder="支持markdown" v-model="note.content" autocomplete="off"
                         v-on:keydown.enter.native="submitModifyNote"></el-input>
                 </el-form-item>
@@ -26,17 +26,30 @@
     export default {
         props: ['host'],
         data() {
+            var validateContent = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请填写笔记内容'));
+                } else if (value.indexOf('|') >= 0) {
+                    callback(new Error('为确保顺利导出数据，请不要使用"|"字符'));
+                } else {
+                    callback();
+                }
+            }
             return {
                 dialogFormVisible: false,
                 note: {
                     content: "",
                     isHide: false
                 },
+                rules: {
+                    content: [{
+                        validator: validateContent,
+                    }]
+                }
             }
         },
         methods: {
             showModifyNoteDialog(item) {
-                console.log(item)
                 this.note = item
                 this.dialogFormVisible = true
             },
@@ -55,30 +68,36 @@
             },
             modifyNote() {
                 var _this = this
-                chrome.storage.sync.get({
-                    q_note_setting: {
-                        number: 0,
-                    },
-                    q_note_data: []
-                }, function (items) {
-                    _this.note.time = dayjs().format('YY-MM-DD HH:mm')
-                    _this.note.isShow = !_this.isHide
-                    for(var index in items.q_note_data){
-                        if(items.q_note_data[index].id == _this.note.id){
-                            items.q_note_data[index] = _this.note
-                            console.log(_this.note)
-                            break
-                        }
+                this.$refs['modifyForm'].validate((valid) => {
+                    if (valid) {
+                        chrome.storage.sync.get({
+                            q_note_setting: {
+                                number: 0,
+                            },
+                            q_note_data: []
+                        }, function (items) {
+                            _this.note.time = dayjs().format('YY-MM-DD HH:mm')
+                            _this.note.isShow = !_this.isHide
+                            for (var index in items.q_note_data) {
+                                if (items.q_note_data[index].id == _this.note.id) {
+                                    items.q_note_data[index] = _this.note
+                                    break
+                                }
+                            }
+                            chrome.storage.sync.set({
+                                q_note_data: items.q_note_data
+                            }, function () {
+                                _this.$emit('refreshData')
+                                _this.hideModifyNoteDialog()
+                                // 此处需处理逻辑
+                                // _this.$refs.card.refreshData()
+                            })
+                        })
+                    } else {
+                        console.log('error submit!!');
+                        return false;
                     }
-                    chrome.storage.sync.set({
-                        q_note_data: items.q_note_data
-                    }, function () {
-                        _this.$emit('refreshData')
-                        _this.hideModifyNoteDialog()
-                        // 此处需处理逻辑
-                        // _this.$refs.card.refreshData()
-                    })
-                })
+                });
             },
         },
     }

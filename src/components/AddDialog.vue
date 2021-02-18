@@ -26,6 +26,15 @@
     export default {
         props: ['host'],
         data() {
+            var validateContent = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请填写笔记内容'));
+                } else if (value.indexOf('|') >= 0) {
+                    callback(new Error('为确保顺利导出数据，请不要使用"|"字符'));
+                } else {
+                    callback();
+                }
+            };
             return {
                 dialogFormVisible: false,
                 note: {
@@ -35,8 +44,7 @@
                 },
                 rules: {
                     content: [{
-                        required: true,
-                        message: '请填写笔记内容',
+                        validator: validateContent,
                     }]
                 }
             }
