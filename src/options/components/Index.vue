@@ -55,8 +55,8 @@
 
 <style>
   html {
-    width: 680px;
-    height: 400px;
+    width: 640px !important;
+    height: 400px !important;
   }
 
   .text {

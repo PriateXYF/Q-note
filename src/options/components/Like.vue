@@ -1,61 +1,107 @@
 <template>
     <div>
-        <!-- <el-collapse accordion>
-            <el-collapse-item>
+        <el-button class="like-data-button" @click="to('/')">返回首页</el-button>
+        <el-button class="like-data-button" @click="refreshData()" type="primary">刷新</el-button>
+        <el-collapse accordion>
+            <el-collapse-item v-for="(site, index) in all_site" :key="index">
                 <template slot="title">
-                    一致性 Consistency
+                    {{site}}
                 </template>
-                <el-row class="allcard">
-                    <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" v-for="(item, index) in data" :key="index">
-                        <el-card class="indexcontainer card" shadow="hover">
-                            <div slot="header" class="clearfix">
-                                <template>
-                                    <el-popconfirm title="确定删除该笔记？">
-                                        <span slot="reference" class="card-close-button"><i
-                                                class="el-icon-circle-close"></i></span>
-                                    </el-popconfirm>
-                                </template>
-
-                                <el-tooltip class="item" effect="dark" :content="copyTip" placement="top">
-                                    <span class="card-button"><i
-                                            :class="item.copyIcon || 'el-icon-copy-document'"></i></span>
-                                </el-tooltip>
-                                <el-tooltip class="item" effect="dark" :content="item.isShow ? '隐藏' : '查看'"
-                                    placement="top">
-                                    <span class="card-button" @click="switchContent(item)"><i
-                                            :class="item.isShow ? 'el-icon-remove' : 'el-icon-view'"></i></span>
-                                </el-tooltip>
-                                <el-tooltip class="item" effect="dark" content="修改" placement="top">
-                                    <span class="card-button" @click="modifyNote(item)"><i
-                                            class="el-icon-edit"></i></span>
-                                </el-tooltip>
-                                <el-tooltip class="item" effect="dark" :content="item.isLike ? '移出收藏' : '加入收藏'"
-                                    placement="top">
-                                    <span class="card-button" @click="switchLike(item)"><i
-                                            :class="item.isLike ? 'el-icon-star-on' : 'el-icon-star-off'"></i></span>
-                                </el-tooltip>
-                            </div>
-                            <div style="padding: 14px;">
-                                <span v-show="!item.isShow" class="card-lock-button"><i class="el-icon-lock"></i></span>
-                                <span v-show="item.isShow" v-html="marked(item.content)"></span>
-                                <div class="bottom clearfix">
-                                    <div class="desc">{{item.time}}</div>
-                                </div>
-                            </div>
-                            <div class="card-remark" v-show="item.remark">备注:{{item.remark}}</div>
-                        </el-card>
-                    </el-col>
-                    <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
-                        <el-card @click.native="showAddNoteDialog" class="indexcontainer card add-note-card"
-                            shadow="hover">
-                            <div style="padding: 14px;">
-                                <span><i class="el-icon-plus"></i></span>
-                                <div class="bottom clearfix"></div>
-                            </div>
-                        </el-card>
-                    </el-col>
-                </el-row>
+                <card ref="card" :data="all_data[site]" :host="site" @modifyNote="modifyNote"
+                    @showAddNoteDialog="showAddNoteDialog" @refreshData="refreshData" @refreshShow="refreshShow"></card>
             </el-collapse-item>
-        </el-collapse> -->
+        </el-collapse>
+        <modify-dialog ref="modifyDialog" :host="host" @refreshData="refreshData"></modify-dialog>
     </div>
 </template>
+<style>
+.like-data-button{
+    margin-top : 20px !important;
+    margin-bottom : 20px !important;
+    margin-right : 10px !important;
+}
+</style>
+<script>
+    import card from '../../components/Card'
+    import modifyDialog from '../../components/ModifyDialog'
+    export default {
+        name: 'App',
+        components: {
+            card,
+            modifyDialog
+        },
+        data() {
+            return {
+                host: 'github.com',
+                data: [],
+                all_site: [],
+                all_data: {}
+            }
+        },
+        methods: {
+            showAddNoteDialog() {
+                this.$refs.addDialog.showAddNoteDialog()
+            },
+            hideAddNoteDialog() {
+                this.$refs.addDialog.hideAddNoteDialog()
+            },
+            modifyNote(item, host) {
+                this.host = host
+                this.$refs.modifyDialog.showModifyNoteDialog(item)
+            },
+            refreshData() {
+                var all_site = []
+                var all_data = {}
+                var _this = this
+                chrome.storage.sync.get({
+                    q_note_setting: {
+                        number: 0,
+                    },
+                    q_note_data: {}
+                }, function (items) {
+                    for (var host in items.q_note_data) {
+                        var liked = items.q_note_data[host].filter((item) => item.isLike == true)
+                        if (liked.length != 0) {
+                            liked = liked.map((note) => {
+                                note.isShow = !note.isHide
+                                return note
+                            })
+                            all_data[host] = liked.reverse()
+                            all_site.push(host)
+                        }
+                    }
+                    _this.all_site = all_site
+                    _this.all_data = all_data
+                })
+            },
+            refreshShow() {}
+        },
+        beforeMount() {
+            this.refreshData()
+        },
+        created() {
+            // 监听快捷键
+            let _this = this;
+            document.onkeydown = function (e) {
+                let evn = e || event;
+                let key = evn.keyCode || evn.which || evn.charCode;
+                if (evn.metaKey && key == 78) {
+                    e.preventDefault()
+                    _this.showAddNoteDialog()
+                }
+            }
+        },
+        computed: {
+            defaultText() {
+                return browser.i18n.getMessage('extName')
+            },
+        }
+    }
+</script>
+
+<style>
+    html {
+        width: 400px;
+        height: 400px;
+    }
+</style>

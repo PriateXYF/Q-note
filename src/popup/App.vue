@@ -9,8 +9,9 @@
       </el-row>
     </el-header>
     <el-main>
-      <card ref="card" :host="host" @modifyNote="modifyNote" @showAddNoteDialog="showAddNoteDialog"></card>
-      <add-dialog ref="addDialog" :host="host" @refreshData="refreshData"></add-dialog>
+      <card ref="card" :data="data" :host="host" @modifyNote="modifyNote" @refreshData="refreshData"
+        @refreshShow="refreshShow"></card>
+      <add-card :host="host" @refreshData="refreshData"></add-card>
       <modify-dialog ref="modifyDialog" :host="host" @refreshData="refreshData"></modify-dialog>
     </el-main>
     <el-footer>
@@ -55,32 +56,47 @@
 
 <script>
   import card from '../components/Card'
-  import addDialog from '../components/AddDialog'
+  import addCard from '../components/AddCard'
   import modifyDialog from '../components/ModifyDialog'
   export default {
     name: 'App',
     components: {
       card,
-      addDialog,
+      addCard,
       modifyDialog
     },
     data() {
       return {
         host: 'unknown',
+        data: []
       }
     },
     methods: {
-      showAddNoteDialog() {
-        this.$refs.addDialog.showAddNoteDialog()
-      },
       hideAddNoteDialog() {
         this.$refs.addDialog.hideAddNoteDialog()
       },
-      refreshData() {
-        this.$refs.card.refreshData()
-      },
       modifyNote(item) {
         this.$refs.modifyDialog.showModifyNoteDialog(item)
+      },
+      refreshData() {
+        var _this = this
+        chrome.storage.sync.get({
+          q_note_setting: {
+            number: 0,
+          },
+          q_note_data: {}
+        }, function (items) {
+          items.q_note_data[_this.host] = items.q_note_data[_this.host] || []
+          _this.data = items.q_note_data[_this.host]
+          _this.data = _this.data.map((item) => {
+            item.isShow = !item.isHide
+            return item
+          })
+          _this.data = _this.data.reverse()
+        })
+      },
+      refreshShow() {
+        this.data = Object.assign({}, this.data)
       }
     },
     beforeMount() {
@@ -92,18 +108,6 @@
         _this.host = tab[0].url.toLowerCase().replace("http://", "").replace("https://", "").replace(
           'www.', '').split('/')[0]
       })
-    },
-    created() {
-      // 监听快捷键
-      let _this = this;
-      document.onkeydown = function (e) {
-        let evn = e || event;
-        let key = evn.keyCode || evn.which || evn.charCode;
-        if (evn.metaKey && key == 78) {
-          e.preventDefault()
-          _this.showAddNoteDialog()
-        }
-      }
     },
     computed: {
       defaultText() {

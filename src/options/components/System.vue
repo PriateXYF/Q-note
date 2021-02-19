@@ -13,7 +13,9 @@
 
 <style>
     .system-data-button {
-        margin: 20px !important;
+        margin-top: 20px !important;
+        margin-bottom: 20px !important;
+        margin-right: 10px !important;
     }
 </style>
 
@@ -36,8 +38,8 @@
                 }, function (items) {
                     for (var key in items.q_note_setting) {
                         _this.systemData.push({
-                            name : key,
-                            value : items.q_note_setting[key]
+                            name: key,
+                            value: items.q_note_setting[key]
                         })
                     }
                 })

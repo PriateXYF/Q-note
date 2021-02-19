@@ -38,14 +38,6 @@
                     <div class="card-remark" v-show="item.remark">备注:{{item.remark}}</div>
                 </el-card>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
-                <el-card @click.native="showAddNoteDialog" class="indexcontainer card add-note-card" shadow="hover">
-                    <div style="padding: 14px;">
-                        <span><i class="el-icon-plus"></i></span>
-                        <div class="bottom clearfix"></div>
-                    </div>
-                </el-card>
-            </el-col>
         </el-row>
     </div>
 </template>
@@ -143,11 +135,10 @@
 <script>
     import marked from 'marked'
     export default {
-        props: ['host'],
+        props: ['host', 'data'],
         data() {
             return {
                 copyTip: '复制',
-                data: [],
                 marked: marked,
             }
         },
@@ -155,7 +146,6 @@
             async copyContent(item) {
                 try {
                     var text = marked(item.content).replace(/<\/?[^>]*>/g, ' ').replace(/&nbsp;/ig, ' ')
-                    // msg = msg.replace(/[|]*\n/, '')
                     await navigator.clipboard.writeText(text);
                     this.copyTip = '已复制'
                     item.copyIcon = 'el-icon-check'
@@ -172,10 +162,11 @@
                 for (var index in this.data) {
                     if (item.id == this.data[index].id) {
                         this.$set(this.data[index], "isShow", !item.isShow);
+                        this.$emit('refreshShow')
                         break
                     }
                 }
-                this.data = Object.assign({}, this.data)
+                // 
             },
             deleteNote(item) {
                 var _this = this
@@ -187,32 +178,12 @@
                     chrome.storage.sync.set({
                         q_note_data: items.q_note_data
                     }, function () {
-                        _this.refreshData()
+                        _this.$emit('refreshData')
                     })
-                })
-            },
-            showAddNoteDialog() {
-                this.$emit('showAddNoteDialog')
-            },
-            refreshData() {
-                var _this = this
-                chrome.storage.sync.get({
-                    q_note_setting: {
-                        number: 0,
-                    },
-                    q_note_data: {}
-                }, function (items) {
-                    items.q_note_data[_this.host] = items.q_note_data[_this.host] || []
-                    _this.data = items.q_note_data[_this.host]
-                    _this.data = _this.data.map((item) => {
-                        item.isShow = !item.isHide
-                        return item
-                    })
-                    _this.data = _this.data.reverse()
                 })
             },
             modifyNote(item) {
-                this.$emit('modifyNote', item)
+                this.$emit('modifyNote', item, this.host)
             },
             switchLike(item) {
                 item.isLike = !item.isLike
@@ -232,13 +203,16 @@
                     chrome.storage.sync.set({
                         q_note_data: items.q_note_data
                     }, function () {
-                        _this.refreshData()
+                        _this.$emit('refreshData')
                     })
                 })
             }
         },
         beforeMount() {
-            this.refreshData()
+            this.$emit('refreshData')
         },
+        computed:{
+         
+        }
     }
 </script>
