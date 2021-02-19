@@ -21,6 +21,11 @@
 </template>
 
 <style>
+  html {
+    width: 400px;
+    height: 540px;
+  }
+
   body {
     /* background-image: linear-gradient(#f0dfaf, #ad7b7c); */
     background-color: #f0dfaf;
@@ -28,13 +33,13 @@
 
   * {
     color: #660000;
-    font-family: "汉体" !important;
+    font-family: "方正书宋" !important;
     /* font-size: ; */
-    
+
   }
 
   @font-face {
-    font-family: '汉体';
+    font-family: '方正书宋';
     font-weight: normal;
     src: url('../assets/q-note.ttf') format('truetype')
   }
@@ -144,10 +149,3 @@
     }
   }
 </script>
-
-<style>
-  html {
-    width: 400px;
-    height: 400px;
-  }
-</style>

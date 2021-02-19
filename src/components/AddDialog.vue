@@ -65,6 +65,12 @@
   background-color: rgba(173, 123, 124, 0.2);
   border-color: transparent;
 }
+
+.el-dialog .el-form-item__error{
+  color: rgb(173, 123, 124) !important;
+}
+
+
     
 </style>
 
