@@ -74,12 +74,13 @@
                             q_note_setting: {
                                 number: 0,
                             },
-                            q_note_data: []
+                            q_note_data: {}
                         }, function (items) {
-                            _this.note.time = dayjs().format('YY-MM-DD HH:mm')
+                            _this.note.time = dayjs().format('YYYY-MM-DD HH:mm')
                             _this.note.id = items.q_note_setting.number
-                            _this.note.host = _this.host
-                            items.q_note_data.push(_this.note)
+                            !_this.note.isHide && delete _this.note.isHide
+                            items.q_note_data[_this.host] = items.q_note_data[_this.host] || []
+                            items.q_note_data[_this.host].push(_this.note)
                             chrome.storage.sync.set({
                                 q_note_setting: {
                                     number: items.q_note_setting.number + 1,
@@ -87,10 +88,7 @@
                                 q_note_data: items.q_note_data
                             }, function () {
                                 _this.hideAddNoteDialog()
-                                console.log(items)
                                 _this.$emit('refreshData')
-                                // 此处需处理逻辑
-                                // _this.$refs.card.refreshData()
                             })
                         })
                     } else {

@@ -11,7 +11,7 @@
     <el-main>
       <card ref="card" :host="host" @modifyNote="modifyNote" @showAddNoteDialog="showAddNoteDialog"></card>
       <add-dialog ref="addDialog" :host="host" @refreshData="refreshData"></add-dialog>
-      <modify-dialog ref="modifyDialog" @refreshData="refreshData"></modify-dialog>
+      <modify-dialog ref="modifyDialog" :host="host" @refreshData="refreshData"></modify-dialog>
     </el-main>
     <el-footer>
       

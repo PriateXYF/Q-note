@@ -2,7 +2,7 @@
     <div>
         <el-card class="box-card">
             <div class="text item">
-                由于本人技术水平有限无法直接生成json文件。
+                由于本人技术水平有限暂时无法直接生成json文件。
                 <br />
                 <br />
                 请点击下面的按钮获取全部数据。
@@ -32,12 +32,9 @@
             getAllData() {
                 var _this = this
                 chrome.storage.sync.get({
-                    q_note_data: []
+                    q_note_data: {}
                 }, function (items) {
                     _this.data = items.q_note_data
-                    if(_this.data.length == 0){
-                        _this.data = "当前还没有任何数据！"
-                    }
                 })
             }
         },

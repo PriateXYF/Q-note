@@ -24,7 +24,7 @@
                             <span class="card-button" @click="modifyNote(item)"><i class="el-icon-edit"></i></span>
                         </el-tooltip>
                         <el-tooltip class="item" effect="dark" :content="item.isLike ? '移出收藏' : '加入收藏'" placement="top">
-                            <span class="card-button"><i
+                            <span class="card-button" @click="switchLike(item)"><i
                                     :class="item.isLike ? 'el-icon-star-on' : 'el-icon-star-off'"></i></span>
                         </el-tooltip>
                     </div>
@@ -184,11 +184,12 @@
             deleteNote(item) {
                 var _this = this
                 chrome.storage.sync.get({
-                    q_note_data: []
+                    q_note_data: {}
                 }, function (items) {
-                    const new_data = items.q_note_data.filter((note) => note.id != item.id)
+                    const new_data = items.q_note_data[_this.host].filter((note) => note.id != item.id)
+                    items.q_note_data[_this.host] = new_data
                     chrome.storage.sync.set({
-                        q_note_data: new_data
+                        q_note_data: items.q_note_data
                     }, function () {
                         _this.refreshData()
                     })
@@ -203,9 +204,10 @@
                     q_note_setting: {
                         number: 0,
                     },
-                    q_note_data: []
+                    q_note_data: {}
                 }, function (items) {
-                    _this.data = items.q_note_data.filter((item) => item.host == _this.host)
+                    items.q_note_data[_this.host] = items.q_note_data[_this.host] || []
+                    _this.data = items.q_note_data[_this.host]
                     _this.data = _this.data.map((item) => {
                         item.isShow = !item.isHide
                         return item
@@ -215,6 +217,28 @@
             },
             modifyNote(item) {
                 this.$emit('modifyNote', item)
+            },
+            switchLike(item) {
+                item.isLike = !item.isLike
+                !item.isLike && delete item.isLike
+                !item.isHide && delete item.isHide
+                delete item.isShow
+                var _this = this
+                chrome.storage.sync.get({
+                    q_note_data: {}
+                }, function (items) {
+                    for (var index in items.q_note_data[_this.host]) {
+                        if (items.q_note_data[_this.host][index].id == item.id) {
+                            items.q_note_data[_this.host][index] = item
+                            break
+                        }
+                    }
+                    chrome.storage.sync.set({
+                        q_note_data: items.q_note_data
+                    }, function () {
+                        _this.refreshData()
+                    })
+                })
             }
         },
         beforeMount() {

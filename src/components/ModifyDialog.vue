@@ -74,13 +74,14 @@
                             q_note_setting: {
                                 number: 0,
                             },
-                            q_note_data: []
+                            q_note_data: {}
                         }, function (items) {
-                            _this.note.time = dayjs().format('YY-MM-DD HH:mm')
-                            _this.note.isShow = !_this.isHide
-                            for (var index in items.q_note_data) {
-                                if (items.q_note_data[index].id == _this.note.id) {
-                                    items.q_note_data[index] = _this.note
+                            _this.note.time = dayjs().format('YYYY-MM-DD HH:mm')
+                            delete _this.note.isShow
+                            !_this.note.isHide && delete _this.note.isHide
+                            for (var index in items.q_note_data[_this.host]) {
+                                if (items.q_note_data[_this.host][index].id == _this.note.id) {
+                                    items.q_note_data[_this.host][index] = _this.note
                                     break
                                 }
                             }
@@ -89,8 +90,6 @@
                             }, function () {
                                 _this.$emit('refreshData')
                                 _this.hideModifyNoteDialog()
-                                // 此处需处理逻辑
-                                // _this.$refs.card.refreshData()
                             })
                         })
                     } else {
