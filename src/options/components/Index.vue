@@ -13,7 +13,7 @@
             <el-link @click="to('import')">全部数据</el-link>
           </div>
           <div class="text item">
-            <el-link @click="to('import')">系统变量</el-link>
+            <el-link @click="to('system')">系统变量</el-link>
           </div>
           <div class="text item">
             <el-link @click="to('destroy')" type="danger">清除全部数据</el-link>

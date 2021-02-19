@@ -11,8 +11,8 @@
                 复制全部内容后手动保存至一个 .json 文件中。
                 <br />
                 <br />
-                <el-button @click="getAllData()">导出数据</el-button>
                 <el-button @click="to('/')">返回首页</el-button>
+                <el-button type="primary" @click="getAllData()">导出数据</el-button>
             </div>
         </el-card>
         <el-card class="box-card">
