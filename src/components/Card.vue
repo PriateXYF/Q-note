@@ -118,10 +118,6 @@
         font-size: 20px;
     }
 
-    /* .card span{
-    max-width: 200px;
-    word-wrap : break-word;
-  } */
     .el-card__body {
         max-width: 100%;
         word-wrap: break-word;
@@ -158,7 +154,7 @@
         methods: {
             async copyContent(item) {
                 try {
-                    var text = item.content.replace(/<\/?[^>]*>/g, ' ').replace(/&nbsp;/ig, ' ')
+                    var text = marked(item.content).replace(/<\/?[^>]*>/g, ' ').replace(/&nbsp;/ig, ' ')
                     // msg = msg.replace(/[|]*\n/, '')
                     await navigator.clipboard.writeText(text);
                     this.copyTip = '已复制'

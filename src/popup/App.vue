@@ -14,13 +14,12 @@
       <modify-dialog ref="modifyDialog" :host="host" @refreshData="refreshData"></modify-dialog>
     </el-main>
     <el-footer>
-      
+
     </el-footer>
   </el-container>
 </template>
 
 <style>
-
   .el-dialog {
     width: 80% !important;
   }
@@ -52,7 +51,6 @@
   .text {
     font-size: 14px;
   }
-
 </style>
 
 <script>
@@ -78,10 +76,10 @@
       hideAddNoteDialog() {
         this.$refs.addDialog.hideAddNoteDialog()
       },
-      refreshData(){
+      refreshData() {
         this.$refs.card.refreshData()
       },
-      modifyNote(item){
+      modifyNote(item) {
         this.$refs.modifyDialog.showModifyNoteDialog(item)
       }
     },
@@ -90,10 +88,9 @@
       chrome.tabs.query({
         active: true
       }, function (tab) {
+        tab[0].url = tab[0].url || 'unknow'
         _this.host = tab[0].url.toLowerCase().replace("http://", "").replace("https://", "").replace(
-            'www.', '')
-          .split(
-            '/')[0] || 'unknow'
+          'www.', '').split('/')[0]
       })
     },
     created() {

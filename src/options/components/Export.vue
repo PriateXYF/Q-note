@@ -2,13 +2,13 @@
     <div>
         <el-card class="box-card">
             <div class="text item">
-                由于本人技术水平有限暂时无法直接生成json文件。
+                导出功能暂时无法直接生成文件。
                 <br />
                 <br />
                 请点击下面的按钮获取全部数据。
                 <br />
                 <br />
-                复制全部内容后手动保存至一个 .json 文件中。
+                你可以复制全部内容后手动保存至一个文本文件中。或者直接粘贴到导入功能的手动导入处。
                 <br />
                 <br />
                 <el-button @click="to('/')">返回首页</el-button>

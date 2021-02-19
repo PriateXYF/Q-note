@@ -10,7 +10,7 @@
             <el-link @click="to('export')">导出数据</el-link>
           </div>
           <div class="text item">
-            <el-link @click="to('import')">全部数据</el-link>
+            <el-link @click="to('data')">全部数据</el-link>
           </div>
           <div class="text item">
             <el-link @click="to('system')">系统变量</el-link>
@@ -22,28 +22,28 @@
       </el-tab-pane>
       <el-tab-pane label="偏好管理">
         <el-card class="box-card">
-            <div class="text item">
-            <el-link @click="to('import')">我的收藏</el-link>
+          <div class="text item">
+            <el-link @click="to('like')">我的收藏</el-link>
           </div>
         </el-card>
       </el-tab-pane>
       <el-tab-pane label="关于">
         <el-card class="box-card">
           <div class="text item">
-            该脚本由Priate创作，创作于 2021-02-19，开源于：
-            <br/>
+            该浏览器拓展由Priate创作，创作于 2021-02-19，开源于：
+            <br />
             <el-link type="primary" :underline="false">https://github.com/PriateXYF/Q-note</el-link>
-            <br/>
+            <br />
             如有任何疑问可以联系邮箱：
-            <br/>
+            <br />
             <el-link type="primary" :underline="false">ufoquinccy@outlook.com</el-link>
-            <br/>
+            <br />
             您可以通过[爱发电]赞助我，也可以直接扫一扫微信赞赏码～
-            <br/>
+            <br />
             <el-link type="primary" :underline="false">https://www.afdian.net/@priate</el-link>
-            <br/><br/>
+            <br /><br />
             <img src="https://priate.oss-cn-beijing.aliyuncs.com/products/picture/wechat.jpg" />
-            <br/><br/>
+            <br /><br />
             笔芯❤️❤️❤️～
           </div>
         </el-card>
@@ -67,8 +67,8 @@
     margin-bottom: 18px;
   }
 
-  .item img{
-    width : 320px;
+  .item img {
+    width: 320px;
   }
 
   .clearfix:before,
@@ -84,8 +84,9 @@
   .box-card {
     width: 95%;
   }
-  .el-tabs{
-      width: 100%;
+
+  .el-tabs {
+    width: 100%;
   }
 </style>
 

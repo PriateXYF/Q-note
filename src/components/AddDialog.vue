@@ -4,7 +4,7 @@
             <el-form :model="note" :rules="rules" ref="addForm">
                 <el-form-item prop="content">
                     <el-input type="textarea" placeholder="支持markdown" v-model="note.content" autocomplete="off"
-                        v-on:keydown.enter.native="submitAddNote"></el-input>
+                        v-on:keydown.enter.native="submitAddNote" :autosize="{ minRows: 2, maxRows: 4}"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-checkbox v-model="note.isHide">隐藏文本</el-checkbox>
