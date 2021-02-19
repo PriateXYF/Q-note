@@ -3,8 +3,8 @@
         <el-dialog title="添加笔记" :visible.sync="dialogFormVisible" center>
             <el-form :model="note" :rules="rules" ref="addForm">
                 <el-form-item prop="content">
-                    <el-input type="textarea" placeholder="支持markdown" v-model="note.content" autocomplete="off"
-                        v-on:keydown.enter.native="submitAddNote" :autosize="{ minRows: 2, maxRows: 4}"></el-input>
+                    <el-input type="textarea" ref="addFormContent" placeholder="支持markdown" v-model="note.content" autocomplete="off"
+                        v-on:keydown.enter.native="submitAddNote" :autosize="{ minRows: 2, maxRows: 4}" autofocus></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-checkbox v-model="note.isHide">隐藏文本</el-checkbox>
@@ -52,6 +52,10 @@
         methods: {
             showAddNoteDialog() {
                 this.dialogFormVisible = true
+                var _this = this
+                setTimeout(function(){
+                    _this.$refs.addFormContent.focus()
+                },0)
             },
             hideAddNoteDialog() {
                 this.dialogFormVisible = false
@@ -62,7 +66,7 @@
                 }
             },
             submitAddNote(e) {
-                if (e.metaKey) {
+                if (e.metaKey || e.altKey) {
                     this.addNote()
                 }
             },
@@ -96,8 +100,6 @@
                         return false;
                     }
                 });
-
-
             },
         },
     }

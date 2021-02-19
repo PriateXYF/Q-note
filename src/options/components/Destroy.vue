@@ -25,6 +25,8 @@
                 type: 'warning'
             }).then(() => {
                 this.resetData()
+            }).catch((e)=>{
+                console.log(e)
             })
             this.$router.push('/')
             

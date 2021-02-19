@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-button class="like-data-button" @click="to('/')">返回首页</el-button>
+        <el-button class="like-data-button" @click="$to('/')">返回首页</el-button>
         <el-button class="like-data-button" @click="refreshData()" type="primary">刷新</el-button>
         <el-collapse accordion>
             <el-collapse-item v-for="(site, index) in all_site" :key="index">

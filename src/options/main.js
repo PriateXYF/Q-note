@@ -8,8 +8,13 @@ Vue.use(ElementUI, {
   zIndex: 3000
 });
 
-Vue.prototype.to = function (path) {
+Vue.prototype.$to = function (path) {
   this.$router.push(path)
+}
+Vue.prototype.$open = function (path) {
+  chrome.tabs.create({
+    url: path
+  })
 }
 
 

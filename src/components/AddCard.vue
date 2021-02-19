@@ -20,12 +20,22 @@
     import addDialog from './AddDialog'
     export default {
         props : ['host'],
+        data() {
+            return {
+                add_dialog_is_open : false
+            }
+        },
         components: {
             addDialog,
         },
         methods: {
             showAddNoteDialog() {
+                this.add_dialog_is_open = true
                 this.$refs.addDialog.showAddNoteDialog()
+            },
+            hideAddNoteDialog() {
+                this.add_dialog_is_open = false
+                this.$refs.addDialog.hideAddNoteDialog()
             },
             refreshData(){
                 this.$emit('refreshData')
@@ -37,9 +47,17 @@
             document.onkeydown = function (e) {
                 let evn = e || event;
                 let key = evn.keyCode || evn.which || evn.charCode;
-                if (evn.metaKey && key == 78) {
+                // 监听 cmd + n 添加事件
+                if ((evn.metaKey || evn.altKey) && key == 78) {
                     e.preventDefault()
                     _this.showAddNoteDialog()
+                }else if(key == 27){
+                    e.preventDefault()
+                    if(_this.add_dialog_is_open){
+                        _this.hideAddNoteDialog()
+                    }else{
+                        window.close()
+                    }
                 }
             }
         },

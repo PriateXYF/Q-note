@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-button class="system-data-button" @click="to('/')">返回首页</el-button>
+        <el-button class="system-data-button" @click="$to('/')">返回首页</el-button>
         <el-button class="system-data-button" @click="refreshSystemData" type="primary">刷新</el-button>
         <el-table :data="systemData" stripe style="width: 100%">
             <el-table-column prop="name" label="变量名" width="140">

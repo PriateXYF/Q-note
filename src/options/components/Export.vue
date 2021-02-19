@@ -11,7 +11,7 @@
                 你可以复制全部内容后手动保存至一个文本文件中。或者直接粘贴到导入功能的手动导入处。
                 <br />
                 <br />
-                <el-button @click="to('/')">返回首页</el-button>
+                <el-button @click="$to('/')">返回首页</el-button>
                 <el-button type="primary" @click="getAllData()">导出数据</el-button>
             </div>
         </el-card>

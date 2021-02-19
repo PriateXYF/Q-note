@@ -61,6 +61,12 @@
 
     .card a {
         text-decoration: none;
+        color: #409eff;
+    }
+    .card a:hover{
+        text-decoration: underline;
+        color: #409eff;
+        opacity: 0.8;
     }
 
     .add-note-card {
@@ -145,7 +151,7 @@
         methods: {
             async copyContent(item) {
                 try {
-                    var text = marked(item.content).replace(/<\/?[^>]*>/g, ' ').replace(/&nbsp;/ig, ' ')
+                    var text = marked(item.content).replace(/<\/?[^>]*>/g, ' ').replace(/&nbsp;/ig, ' ').trim()
                     await navigator.clipboard.writeText(text);
                     this.copyTip = '已复制'
                     item.copyIcon = 'el-icon-check'
@@ -210,6 +216,18 @@
         },
         beforeMount() {
             this.$emit('refreshData')
+        },
+        mounted() {
+            setTimeout(function(){
+                document.querySelectorAll('a').forEach((item)=>{
+                    item.addEventListener('click', function(e){
+                        e.preventDefault()
+                        chrome.tabs.create({
+                            url: this.href
+                        })
+                    })
+                })
+            },0)
         },
         computed:{
          

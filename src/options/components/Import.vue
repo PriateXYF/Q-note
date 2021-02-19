@@ -11,7 +11,7 @@
                 手动导入请手动将导出的全部内容复制粘贴到文本框进行导入。
                 <br />
                 <br />
-                <el-button @click="to('/')">返回首页</el-button>
+                <el-button @click="$to('/')">返回首页</el-button>
                 <el-button type="primary" @click="isFileImport = true">文件导入</el-button>
                 <el-button type="primary" @click="isFileImport = false">手动导入</el-button>
             </div>
