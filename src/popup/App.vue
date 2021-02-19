@@ -4,7 +4,7 @@
       <el-row class="head-text">
         <p class="head-text-line-1">{{ defaultText }}</p>
         <p class="head-text-line-2">
-          <el-tag effect="dark">{{host}}</el-tag>
+          <el-tag class="host-tag">{{host}}</el-tag>
         </p>
       </el-row>
     </el-header>
@@ -21,8 +21,36 @@
 </template>
 
 <style>
+  body {
+    /* background-image: linear-gradient(#f0dfaf, #ad7b7c); */
+    background-color: #f0dfaf;
+  }
+
+  * {
+    color: #660000;
+    font-family: "汉体" !important;
+    /* font-size: ; */
+    
+  }
+
+  @font-face {
+    font-family: '汉体';
+    font-weight: normal;
+    src: url('../assets/q-note.ttf') format('truetype')
+  }
+
+  /* body {
+  
+  } */
+
   .el-dialog {
     width: 80% !important;
+  }
+
+  .host-tag {
+    background: #660000 !important;
+    color: #f0dfaf !important;
+    border: transparent !important;
   }
 
   .head-text-line-1 {

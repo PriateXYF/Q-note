@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-dialog title="添加笔记" :visible.sync="dialogFormVisible" center>
+        <el-dialog title="添加笔记" :visible.sync="dialogFormVisible" center :show-close="false">
             <el-form :model="note" :rules="rules" ref="addForm">
                 <el-form-item prop="content">
                     <el-input type="textarea" ref="addFormContent" placeholder="支持markdown" v-model="note.content" autocomplete="off"
@@ -21,6 +21,53 @@
         </el-dialog>
     </div>
 </template>
+
+<style>
+.el-dialog{
+  background-color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.el-dialog .el-dialog__title {
+  color: #660000;
+}
+
+.el-dialog input,textarea {
+  background-color: white;
+  color: #660000 !important;
+  border-color: #660000 !important;
+  
+}
+.el-dialog input:focus,textarea:focus {
+  background-color: rgba(173, 123, 124, 0.1);
+  border-color: transparent;
+}
+.el-dialog input::-webkit-input-placeholder,textarea::-webkit-input-placeholder {
+  color: rgba(173, 123, 124, 0.7) !important;
+}
+
+.el-dialog input:-moz-placeholder,textarea:-moz-placeholder {
+  color: rgba(173, 123, 124, 0.7) !important;
+}
+
+.el-dialog input::-moz-placeholder,textarea::-moz-placeholder {
+  color: rgba(173, 123, 124, 0.7) !important;
+}
+
+.el-dialog input:-ms-input-placeholder,textarea:-ms-input-placeholder {
+  color: rgba(173, 123, 124, 0.7) !important;
+}
+
+.el-dialog button{
+  background-color: rgba(173, 123, 124, 0.5);
+  border-color: transparent;
+}
+.el-dialog button:hover{
+  background-color: rgba(173, 123, 124, 0.2);
+  border-color: transparent;
+}
+    
+</style>
+
 <script>
     import dayjs from 'dayjs'
     export default {

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-dialog title="修改笔记" :visible.sync="dialogFormVisible" center>
+        <el-dialog title="修改笔记" :visible.sync="dialogFormVisible" center :show-close="false">
             <el-form :model="note" :rules="rules" ref="modifyForm">
                 <el-form-item prop="content">
                     <el-input type="textarea" placeholder="支持markdown" v-model="note.content" autocomplete="off"

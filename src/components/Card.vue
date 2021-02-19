@@ -59,13 +59,23 @@
         margin-block-end: 0.5em;
     }
 
+    .el-popconfirm__action .el-button--primary{
+        background-color: rgba(173, 123, 124, 0.5);
+        border-color: transparent;
+    }
+    .el-popconfirm__action .el-button--primary:hover{
+        background-color: rgba(173, 123, 124, 0.2);
+        border-color: transparent;
+    }
+
     .card a {
         text-decoration: none;
-        color: #409eff;
+        color: #686868;;
+        
     }
     .card a:hover{
         text-decoration: underline;
-        color: #409eff;
+        color: rgb(173, 123, 124);
         opacity: 0.8;
     }
 
@@ -85,17 +95,7 @@
         float: right;
         margin: 10px;
         font-size: 20px;
-        color: pink;
-    }
-
-    .card-button:hover {
-        color: yellowgreen;
-        transition: color 0.5s;
-    }
-
-    .card-close-button:hover {
-        color: red;
-        transition: color 0.5s;
+        /* color: pink; */
     }
 
     .allcard {
@@ -107,14 +107,21 @@
 
     .el-card__header {
         padding: 0 !important;
+        border-bottom: 1px solid #686868 !important;
     }
 
     .card {
         margin-bottom: 10px;
         /* width: 100%; */
         background-size: cover !important;
+        background-color: rgba(255, 255, 255, 0.3) !important;
+        border-color: #686868 !important;
         font-size: 20px;
     }
+    .card:hover {
+        box-shadow: 0 2px 12px 0 rgb(0 0 0) !important;
+    }
+
 
     .el-card__body {
         max-width: 100%;
