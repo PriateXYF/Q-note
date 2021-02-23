@@ -39,10 +39,10 @@ npm run build
 
 ## 快捷键
 
-* 建议打开 [chrome://extensions/shortcuts](chrome://extensions/shortcuts) 设置快捷键为 `CMD + n` 全局监听。这样只要连续按两下 `CMD + n` 就可以快速添加笔记。
 * `CMD/ALT/WIN + enter` ： 在添加笔记输入框输入完毕时直接添加。
 * `CMD/ALT/WIN + n` ： 添加笔记。
-* `CMD/ALT/WIN + esc` ： 取消笔记的添加/关闭popup。
+* `esc` ： 取消笔记的添加/关闭popup。
+* 建议打开 [chrome://extensions/shortcuts](chrome://extensions/shortcuts) 设置快捷键为 `CMD + n` 全局监听。这样只要连续按两下 `CMD + n` 就可以快速添加笔记。
 
 ## TODO
 
@@ -54,7 +54,7 @@ npm run build
 * ~~更改配色方案及字体~~
 * 制作官网
 * ~~快捷键调出功能实现~~
-* ~~实现鼠标右键快速做笔记(已放弃该feature，意义不大)~~
+* ~~实现鼠标右键快速做笔记(已放弃该feature)~~
 
 ## 预览
 
