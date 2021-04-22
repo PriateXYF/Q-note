@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-loading.fullscreen.lock="isLock">
         <el-card class="box-card">
             <div class="text item">
                 导入数据会在原有的数据基础上新增数据，不会覆盖原有数据。若想覆盖原有数据请先销毁全部数据。
@@ -14,6 +14,7 @@
                 <el-button @click="$to('/')">返回首页</el-button>
                 <el-button type="primary" @click="isFileImport = true">文件导入</el-button>
                 <el-button type="primary" @click="isFileImport = false">手动导入</el-button>
+                <el-button type="success" @click="importFromCloud">云端导入</el-button>
             </div>
         </el-card>
         <div v-show="isFileImport">
@@ -53,6 +54,7 @@
 </style>
 
 <script>
+    import AV from 'leancloud-storage';
     export default {
         data() {
             return {
@@ -60,7 +62,8 @@
                 fileList: [],
                 hasFile: false,
                 import_data: {},
-                import_string: ""
+                import_string: "",
+                isLock: false
             }
         },
         methods: {
@@ -85,10 +88,9 @@
                         items.q_note_setting.number += import_data[key].length
                         items.q_note_data[key] = items.q_note_data[key].concat(import_data[key])
                     }
+                    items.q_note_setting.number = items.q_note_setting.number + 1
                     chrome.storage.sync.set({
-                        q_note_setting: {
-                            number: items.q_note_setting.number + 1,
-                        },
+                        q_note_setting: items.q_note_setting,
                         q_note_data: items.q_note_data
                     }, function () {
                         _this.$message.success('数据导入成功！')
@@ -132,6 +134,76 @@
                     return false
                 }
                 this.importData(data)
+            },
+            importFromCloud() {
+                var _this = this
+                chrome.storage.sync.get({
+                    q_note_setting: {
+                        number: 0,
+                    },
+                    q_note_data: {}
+                }, function (items) {
+                    var setting = items.q_note_setting
+                    // 如果没有设置
+                    if (setting.leancloud_appid && setting.leancloud_appkey) {
+                        _this.$prompt('', '请输入同步码', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消'
+                        }).then(({
+                            value
+                        }) => {
+                            _this.doSyncByCode(value)
+                        })
+                    } else {
+                        _this.$confirm('还没有绑定leancloud，是否前往设置？', '提示', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                            type: 'warning'
+                        }).then(() => {
+                            _this.$to('leancloud')
+                        }).catch(() => {})
+                    }
+                })
+            },
+            doSyncByCode(code) {
+                var _this = this
+                chrome.storage.sync.get({
+                    q_note_setting: {
+                        number: 0,
+                    },
+                    q_note_data: {}
+                }, function (items) {
+                    _this.isLock = true
+                    var setting = items.q_note_setting
+                    var appId = setting.leancloud_appid
+                    var appKey = setting.leancloud_appkey
+                    AV.init({
+                        appId,
+                        appKey
+                    })
+                    const query = new AV.Query('_File')
+                    query.equalTo('name', code + '.json')
+                    query.first().then((file) => {
+                        _this.isLock = false
+                        if (file) {
+                            _this.$http.get(file.get('url')).then((response) => {
+                                // _this.$alert()
+                                var data
+                                try {
+                                    data = JSON.parse(JSON.stringify(response.data))
+                                } catch (e) {
+                                    _this.$message.error('json读取出现错误，请检查json格式是否正确。')
+                                    return false
+                                }
+                                _this.importData(data)
+                            })
+                        } else {
+                            _this.$message.error('同步码不存在或已失效')
+                        }
+                    }).catch((error) => {
+                        _this.$message.error('查询时出现错误:' + error)
+                    })
+                })
             }
         }
     }

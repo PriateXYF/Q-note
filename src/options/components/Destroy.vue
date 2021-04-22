@@ -12,7 +12,8 @@
                     q_note_setting: {
                         number: 0,
                     },
-                    q_note_data: {}
+                    q_note_data: {},
+                    q_note_cloud_backup: []
                 }, function (res) {
                     _this.$message.success('数据销毁成功！已重置为初始状态。');
                 })

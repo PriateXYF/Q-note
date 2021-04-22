@@ -7,6 +7,7 @@ import Destroy from '../options/components/Destroy'
 import System from '../options/components/System'
 import Data from '../options/components/Data'
 import Like from '../options/components/Like'
+import Leancloud from '../options/components/Leancloud'
 Vue.use(VueRouter)
 const routes = [{
         path: '/',
@@ -42,6 +43,11 @@ const routes = [{
         path: '/like',
         name: 'Like',
         component: Like
+    },
+    {
+        path: '/leancloud',
+        name: 'Leancloud',
+        component: Leancloud
     },
 ]
 

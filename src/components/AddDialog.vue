@@ -138,10 +138,9 @@
                             !_this.note.isHide && delete _this.note.isHide
                             items.q_note_data[_this.host] = items.q_note_data[_this.host] || []
                             items.q_note_data[_this.host].push(_this.note)
+                            items.q_note_setting.number = items.q_note_setting.number + 1
                             chrome.storage.sync.set({
-                                q_note_setting: {
-                                    number: items.q_note_setting.number + 1,
-                                },
+                                q_note_setting: items.q_note_setting,
                                 q_note_data: items.q_note_data
                             }, function () {
                                 _this.hideAddNoteDialog()

@@ -26,6 +26,9 @@
             <el-link @click="$to('like')">我的收藏</el-link>
           </div>
           <div class="text item">
+            <el-link @click="$to('leancloud')">leancloud绑定</el-link>
+          </div>
+          <div class="text item">
             <el-link @click="activeShortcuts">激活快捷键</el-link>
           </div>
         </el-card>
