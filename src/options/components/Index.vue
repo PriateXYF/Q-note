@@ -16,7 +16,7 @@
             <el-link @click="$to('system')">系统变量</el-link>
           </div>
           <div class="text item">
-            <el-link @click="$to('destroy')" type="danger">清除全部数据</el-link>
+            <el-link @click="$to('destroy')" type="danger">重置数据</el-link>
           </div>
         </el-card>
       </el-tab-pane>

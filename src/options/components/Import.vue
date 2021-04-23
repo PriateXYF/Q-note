@@ -2,7 +2,7 @@
     <div v-loading.fullscreen.lock="isLock">
         <el-card class="box-card">
             <div class="text item">
-                导入数据会在原有的数据基础上新增数据，不会覆盖原有数据。若想覆盖原有数据请先销毁全部数据。
+                导入数据会在原有的数据基础上新增数据，不会覆盖原有数据。若想覆盖原有数据请先 <el-link type="danger" @click="resetData">销毁全部数据</el-link> 。
                 <br />
                 <br />
                 文件导入可以上传导出的 JSON/JS 文件进行导入。
@@ -73,6 +73,22 @@
                     data[index].id = ++baseId
                 }
                 return data
+            },
+            resetData() {
+                var _this = this
+                this.$confirm('是否销毁全部数据？(无法恢复，请先确认是否备份)', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    chrome.storage.sync.set({
+                        q_note_data: {},
+                    }, function (res) {
+                        _this.$message.success('数据销毁成功！');
+                    })
+                }).catch((e) => {
+                    console.log(e)
+                })
             },
             importData(import_data) {
                 var _this = this
@@ -148,12 +164,14 @@
                     if (setting.leancloud_appid && setting.leancloud_appkey) {
                         _this.$prompt('', '请输入同步码', {
                             confirmButtonText: '确定',
-                            cancelButtonText: '取消'
+                            cancelButtonText: '取消',
+                            inputPattern: /^\w{4,16}$/,
+                            inputErrorMessage: '同步码格式不正确'
                         }).then(({
                             value
                         }) => {
                             _this.doSyncByCode(value)
-                        })
+                        }).catch((error)=>{})
                     } else {
                         _this.$confirm('还没有绑定leancloud，是否前往设置？', '提示', {
                             confirmButtonText: '确定',
@@ -182,12 +200,11 @@
                         appKey
                     })
                     const query = new AV.Query('_File')
-                    query.equalTo('name', code + '.json')
+                    query.equalTo('name', code.trim() + '.json')
                     query.first().then((file) => {
-                        _this.isLock = false
                         if (file) {
                             _this.$http.get(file.get('url')).then((response) => {
-                                // _this.$alert()
+                                _this.isLock = false
                                 var data
                                 try {
                                     data = JSON.parse(JSON.stringify(response.data))
@@ -198,9 +215,11 @@
                                 _this.importData(data)
                             })
                         } else {
+                            _this.isLock = false
                             _this.$message.error('同步码不存在或已失效')
                         }
                     }).catch((error) => {
+                        _this.isLock = false
                         _this.$message.error('查询时出现错误:' + error)
                     })
                 })

@@ -1,9 +1,8 @@
 <template>
     <div v-loading.fullscreen.lock="isLock">
         <el-button class="system-data-button" @click="$to('/')">返回首页</el-button>
-        <!-- <el-button class="system-data-button" @click="" type="primary">刷新</el-button> -->
         <el-card class="box-card">
-            <el-form :label-position="'top'" label-width="80px" :model="formLabelAlign">
+            <el-form :label-position="'top'" label-width="80px" :model="formdata">
                 <el-form-item label="AppID">
                     <el-input v-model="formdata.appid"></el-input>
                 </el-form-item>

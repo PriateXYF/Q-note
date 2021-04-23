@@ -27,7 +27,7 @@
                 </el-table-column>
                 <el-table-column prop="url" label="操作">
                     <template slot-scope="scope">
-                        <el-button @click="deleteSyncHistoryById(scope.row.id)" type="text" size="small">删除</el-button>
+                        <el-button size="mini" type="danger" @click="deleteSyncHistoryById(scope.row.id)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -73,7 +73,7 @@
                     if (setting.leancloud_appid && setting.leancloud_appkey) {
                         _this.$confirm("确定将数据同步至云端？").then(() => {
                             _this.doSyncToCloud()
-                        })
+                        }).catch((error)=>{})
                     } else {
                         _this.$confirm('还没有绑定leancloud，是否前往设置？', '提示', {
                             confirmButtonText: '确定',
@@ -87,7 +87,7 @@
             },
             randomString(len) {
                 len = len || 8
-                var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678';
+                var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz12345678';
                 var pwd = '';
                 for (var i = 0; i < len; i++) {
                     pwd += chars.charAt(Math.floor(Math.random() * chars.length));
@@ -111,7 +111,7 @@
                         appId,
                         appKey
                     })
-                    var randomWord = _this.randomString(8)
+                    var randomWord = _this.randomString(15)
                     const file = new AV.File(randomWord + '.json', new File([JSON.stringify(items.q_note_data)],
                         randomWord + '.json'))
                     file.save({
@@ -124,6 +124,7 @@
                             q_note_cloud_backup: [],
                         }, function (item) {
                             _this.backupHistory = item.q_note_cloud_backup
+                            _this.backupHistory.reverse()
                             _this.backupHistory.push({
                                 time: dayjs().format('YYYY-MM-DD HH:mm'),
                                 code: randomWord,
@@ -167,15 +168,39 @@
                     chrome.storage.sync.get({
                         q_note_cloud_backup: [],
                     }, function (item) {
-                        // const file = AV.File.createWithoutData(id);
-                        // file.destroy()
                         _this.backupHistory = item.q_note_cloud_backup.filter((history) => {
                             return id !== history.id
                         })
                         chrome.storage.sync.set({
                             q_note_cloud_backup: _this.backupHistory,
                         }, function () {
-                            _this.$message.success('删除成功！')
+                            chrome.storage.sync.get({
+                                q_note_setting: {
+                                    number: 0,
+                                }
+                            }, function (items) {
+                                _this.isLock = true
+                                _this.loadText = "正在删除云端文件"
+                                var setting = items.q_note_setting
+                                var appId = setting.leancloud_appid
+                                var appKey = setting.leancloud_appkey
+                                AV.init({
+                                    appId,
+                                    appKey
+                                })
+                                const file = AV.File.createWithoutData(id);
+                                file.destroy().then(()=>{
+                                    _this.isLock = false
+                                    _this.$message.success('删除成功！')
+                                }).catch((error)=>{
+                                    _this.isLock = false
+                                    if(error.code == 403){
+                                        _this.$message.error('云端文件删除失败，请确认删除权限已打开！')
+                                    }else{
+                                        _this.$message.error('云端文件删除失败，出现未知错误:' + error)
+                                    }
+                                })
+                            })
                         })
 
                     })
