@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-dialog title="修改笔记" :visible.sync="dialogFormVisible" center :show-close="false">
+        <el-dialog title="修改笔记" :visible.sync="dialogFormVisible" :before-close="hideModifyNoteDialog" center :show-close="false">
             <el-form :model="note" :rules="rules" ref="modifyForm">
                 <el-form-item prop="content">
                     <el-input type="textarea" placeholder="支持markdown" v-model="note.content" autocomplete="off"
@@ -15,7 +15,7 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button @click="hideModifyNoteDialog">取 消</el-button>
                 <el-button type="primary" @click="modifyNote">确 定</el-button>
             </div>
         </el-dialog>
@@ -60,6 +60,7 @@
                     remark: "",
                     isHide: false
                 }
+                this.$emit('refreshData')
             },
             submitModifyNote(e) {
                 if (e.metaKey) {

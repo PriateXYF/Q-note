@@ -127,6 +127,7 @@
           })
           _this.data = _this.data.reverse()
         })
+        
       },
       refreshShow() {
         this.data = Object.assign({}, this.data)

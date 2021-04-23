@@ -32,13 +32,13 @@
 }
 
 .el-dialog input,textarea {
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.1);
   color: #660000 !important;
   border-color: #660000 !important;
   
 }
 .el-dialog input:focus,textarea:focus {
-  background-color: rgba(173, 123, 124, 0.1);
+  background-color: white;
   border-color: transparent;
 }
 .el-dialog input::-webkit-input-placeholder,textarea::-webkit-input-placeholder {
@@ -65,9 +65,28 @@
   background-color: rgba(173, 123, 124, 0.2);
   border-color: transparent;
 }
+.el-dialog button:focus{
+  background-color: rgba(173, 123, 124, 0.2);
+  border-color: transparent;
+}
 
 .el-dialog .el-form-item__error{
   color: rgb(173, 123, 124) !important;
+}
+
+.el-checkbox__label{
+    color: #660000 !important;
+}
+
+.el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+    background-color: #660000 !important;
+    border-color: #660000 !important;
+}
+.el-checkbox__input.is-focus .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+    border-color: #660000 !important;
+}
+.el-checkbox__input .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+    border-color: #660000 !important;
 }
 
 
@@ -82,8 +101,6 @@
             var validateContent = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error('请填写笔记内容'));
-                } else if (value.indexOf('|') >= 0) {
-                    callback(new Error('为确保顺利导出数据，请不要使用"|"字符'));
                 } else {
                     callback();
                 }
